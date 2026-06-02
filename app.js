@@ -1,4 +1,5 @@
 let allPapers = [];
+let domains = [];
 let favorites = new Set();
 const FAVORITES_STORAGE_KEY = "hermes-arxiv-agent:favorites";
 
@@ -40,6 +41,56 @@ function text(v) {
   return (v || "").toString();
 }
 
+function domainKey(paper) {
+  return text(paper.search_domain) || "default";
+}
+
+function domainLabel(paper) {
+  return text(paper.search_domain_label) || domainKey(paper);
+}
+
+function titleCaseDomain(value) {
+  return text(value)
+    .split(/[_-]+/)
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ") || "Default";
+}
+
+function buildDomains(payload) {
+  const map = new Map();
+  (payload.domains || []).forEach((entry) => {
+    if (typeof entry === "string") {
+      map.set(entry, titleCaseDomain(entry));
+    } else if (entry && entry.key) {
+      map.set(String(entry.key), text(entry.label) || titleCaseDomain(entry.key));
+    }
+  });
+  allPapers.forEach((paper) => {
+    const key = domainKey(paper);
+    if (!map.has(key)) {
+      map.set(key, domainLabel(paper) || titleCaseDomain(key));
+    }
+  });
+  domains = Array.from(map, ([key, label]) => ({ key, label }))
+    .sort((a, b) => a.label.localeCompare(b.label));
+}
+
+function populateDomainSelect() {
+  const select = document.getElementById("domainSelect");
+  select.innerHTML = "";
+  const allOption = document.createElement("option");
+  allOption.value = "all";
+  allOption.textContent = "全部领域";
+  select.appendChild(allOption);
+  domains.forEach((domain) => {
+    const option = document.createElement("option");
+    option.value = domain.key;
+    option.textContent = domain.label;
+    select.appendChild(option);
+  });
+}
+
 function formatDate(date) {
   const y = date.getFullYear();
   const m = `${date.getMonth() + 1}`.padStart(2, "0");
@@ -76,6 +127,9 @@ function matchesKeyword(paper, keyword) {
     paper.authors,
     paper.affiliations,
     paper.categories,
+    paper.search_domain,
+    paper.search_domain_label,
+    paper.search_keyword,
     paper.summary_cn,
     paper.abstract,
   ].join(" ").toLowerCase();
@@ -136,6 +190,9 @@ function renderCards(papers) {
       tags.appendChild(span);
     });
 
+    const domain = node.querySelector(".domain-line");
+    domain.textContent = `领域: ${domainLabel(p)}`;
+
     node.querySelector(".affiliations").textContent = text(p.affiliations) || "未提供";
     node.querySelector(".summary-cn").textContent = text(p.summary_cn) || "未提供";
     node.querySelector(".abstract").textContent = text(p.abstract) || "未提供";
@@ -145,6 +202,7 @@ function renderCards(papers) {
 }
 
 function applyFilter() {
+  const selectedDomain = document.getElementById("domainSelect").value;
   const dateMode = document.getElementById("dateMode").value;
   const start = document.getElementById("startDate").value;
   const end = document.getElementById("endDate").value;
@@ -152,6 +210,7 @@ function applyFilter() {
   const favoriteOnly = document.getElementById("favoriteOnly").checked;
 
   const papers = allPapers.filter((p) =>
+    (selectedDomain === "all" || domainKey(p) === selectedDomain) &&
     inRange(text(p[dateMode]), start, end) &&
     matchesKeyword(p, keyword) &&
     (!favoriteOnly || isFavorite(p.arxiv_id))
@@ -159,10 +218,14 @@ function applyFilter() {
   renderCards(papers);
 
   const summary = document.getElementById("summary");
-  summary.textContent = `共 ${allPapers.length} 篇，收藏 ${favorites.size} 篇，当前展示 ${papers.length} 篇（按 ${dateMode === "crawled_date" ? "抓取日期" : "发表日期"} 筛选）`;
+  const domainText = selectedDomain === "all"
+    ? "全部领域"
+    : (domains.find((d) => d.key === selectedDomain)?.label || titleCaseDomain(selectedDomain));
+  summary.textContent = `共 ${allPapers.length} 篇，领域 ${domains.length} 个，收藏 ${favorites.size} 篇，当前展示 ${papers.length} 篇（${domainText}，按 ${dateMode === "crawled_date" ? "抓取日期" : "发表日期"} 筛选）`;
 }
 
 function resetFilter(defaultMin, defaultMax) {
+  document.getElementById("domainSelect").value = "all";
   document.getElementById("dateMode").value = "crawled_date";
   document.getElementById("startDate").value = defaultMin || "";
   document.getElementById("endDate").value = defaultMax || "";
@@ -213,6 +276,8 @@ async function init() {
 
   const payload = await res.json();
   allPapers = payload.papers || [];
+  buildDomains(payload);
+  populateDomainSelect();
   loadFavorites();
 
   const defaultMin = payload.crawled_date_min || "";
@@ -228,6 +293,7 @@ async function init() {
 
   document.getElementById("applyBtn").addEventListener("click", applyFilter);
   document.getElementById("resetBtn").addEventListener("click", () => resetFilter(defaultMin, defaultMax));
+  document.getElementById("domainSelect").addEventListener("change", applyFilter);
   document.getElementById("favoriteOnly").addEventListener("change", applyFilter);
   document.getElementById("quickRange").addEventListener("click", (e) => {
     const btn = e.target.closest("button[data-range]");

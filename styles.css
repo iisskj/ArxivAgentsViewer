@@ -129,24 +129,28 @@ input[type="date"] {
   min-inline-size: 0;
 }
 
+.domain-field {
+  grid-column: 1 / span 2;
+}
+
 .search-field {
   grid-column: 1 / span 8;
 }
 
 .quick-range-field {
-  grid-column: 7 / span 4;
+  grid-column: 9 / span 2;
 }
 
 .date-mode-field {
-  grid-column: 1 / span 2;
-}
-
-.start-date-field {
   grid-column: 3 / span 2;
 }
 
-.end-date-field {
+.start-date-field {
   grid-column: 5 / span 2;
+}
+
+.end-date-field {
+  grid-column: 7 / span 2;
 }
 
 .quick-range {
@@ -164,6 +168,7 @@ input[type="date"] {
 .favorite-only-field {
   grid-column: 9 / span 2;
   justify-content: end;
+  grid-row: 2;
 }
 
 .switch-label {
@@ -186,7 +191,7 @@ input[type="date"] {
   display: flex;
   gap: 8px;
   align-items: end;
-  grid-row: 1;
+  grid-row: 2;
 }
 
 .actions .btn {
@@ -284,6 +289,12 @@ input[type="date"] {
   line-height: 1.5;
 }
 
+.domain-line {
+  color: #0f766e;
+  font-size: 12px;
+  font-weight: 700;
+}
+
 .tags {
   display: flex;
   flex-wrap: wrap;
@@ -341,6 +352,7 @@ summary {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .domain-field,
   .date-mode-field,
   .start-date-field,
   .end-date-field,
@@ -392,6 +404,7 @@ summary {
     padding: 12px;
   }
 
+  .domain-field,
   .date-mode-field,
   .start-date-field,
   .end-date-field,

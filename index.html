@@ -30,6 +30,13 @@
 
   <main class="container">
     <section class="filters">
+      <div class="field domain-field">
+        <label for="domainSelect">领域</label>
+        <select id="domainSelect">
+          <option value="all">全部领域</option>
+        </select>
+      </div>
+
       <div class="field date-mode-field">
         <label for="dateMode">日期维度</label>
         <select id="dateMode">
@@ -88,9 +95,10 @@
         <a class="title" target="_blank" rel="noopener noreferrer"></a>
         <button class="favorite-btn" type="button" aria-label="收藏">☆ 收藏</button>
       </div>
-      <div class="meta"></div>
-      <div class="tags"></div>
-      <div class="section">
+        <div class="meta"></div>
+        <div class="tags"></div>
+        <div class="domain-line"></div>
+        <div class="section">
         <h3>单位</h3>
         <p class="affiliations"></p>
       </div>

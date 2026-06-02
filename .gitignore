@@ -1,4 +1,5 @@
 papers_record.xlsx
+papers_record_*.xlsx
 favorites.json
 *.pyc
 **/__pycache__/

@@ -1,8 +1,10 @@
 # LLM 量化论文阅读页
 
 ## 功能
-- 读取同目录下的 `papers_record.xlsx` 并转换为 `papers_data.json`
+- 读取同目录下的 `papers_record_{domain}.xlsx` 并转换为 `papers_data.json`
+- 使用 `search_keywords.yaml` 按 domain 配置 arXiv 检索关键词
 - 本地静态页面展示论文卡片
+- 支持按 domain 切换和筛选论文
 - 按日期区间筛选（抓取日期或发表日期）
 - 支持关键词检索（标题/作者/单位/分类/摘要）
 - 收藏保存在浏览器 `localStorage`，适合 GitHub Pages 纯静态部署
@@ -39,8 +41,9 @@ http://<你的机器局域网IP>:8765
 当前目录是独立 viewer 仓库，可以直接作为 GitHub Pages 的发布产物。
 
 - `index.html`、`app.js`、`styles.css`、`favicon.svg`、`papers_data.json` 会被部署到静态站点
+- `search_keywords.yaml` 是监控配置，按 domain 维护多条查询
 - 收藏只保存在访问者当前浏览器，不做多设备同步
-- `papers_record.xlsx` 是本地数据源，已通过 `.gitignore` 排除，不会发布
+- `papers_record.xlsx` 和 `papers_record_*.xlsx` 是本地数据源，已通过 `.gitignore` 排除，不会发布
 - 每次更新 `papers_data.json` 后，从主项目执行：
 
 ```bash
