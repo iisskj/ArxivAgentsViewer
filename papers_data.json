@@ -168,6 +168,10 @@
   ],
   "domains": [
     {
+      "key": "ai_agent_post_training",
+      "label": "AI Agent Post-training"
+    },
+    {
       "key": "llm_quantization",
       "label": "LLM Quantization"
     }

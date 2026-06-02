@@ -16,12 +16,102 @@ from openpyxl import load_workbook
 BASE_DIR = Path(__file__).resolve().parent
 LEGACY_EXCEL_PATH = BASE_DIR / "papers_record.xlsx"
 OUTPUT_PATH = BASE_DIR / "papers_data.json"
+KEYWORDS_PATH = BASE_DIR / "search_keywords.yaml"
 
 
 def normalize_text(value: object) -> str:
     if value is None:
         return ""
     return str(value).replace("\n", " ").strip()
+
+
+def clean_yaml_scalar(value: object) -> str:
+    text = str(value).strip()
+    if len(text) >= 2 and text[0] == text[-1] and text[0] in {"'", '"'}:
+        text = text[1:-1]
+    return text.strip()
+
+
+def parse_keywords_yaml_without_dependency(path: Path) -> dict:
+    data: dict[str, dict] = {"domains": {}}
+    current_domain: str | None = None
+    in_domains = False
+
+    for raw_line in path.read_text(encoding="utf-8").splitlines():
+        if not raw_line.strip() or raw_line.lstrip().startswith("#"):
+            continue
+
+        indent = len(raw_line) - len(raw_line.lstrip(" "))
+        line = raw_line.strip()
+
+        if indent == 0 and line == "domains:":
+            current_domain = None
+            in_domains = True
+            continue
+
+        if in_domains and indent == 2 and line.endswith(":") and not line.startswith("- "):
+            current_domain = clean_yaml_scalar(line[:-1])
+            data["domains"].setdefault(current_domain, {})
+            continue
+
+        if current_domain and indent >= 4 and ":" in line and not line.startswith("- "):
+            field, value = line.split(":", 1)
+            data["domains"][current_domain][field.strip()] = clean_yaml_scalar(value)
+
+    return data
+
+
+def load_keywords_yaml(path: Path) -> dict:
+    if not path.exists():
+        return {}
+    try:
+        import yaml  # type: ignore
+
+        loaded = yaml.safe_load(path.read_text(encoding="utf-8"))
+        return loaded if isinstance(loaded, dict) else {}
+    except ModuleNotFoundError:
+        return parse_keywords_yaml_without_dependency(path)
+
+
+def title_case_domain(value: str) -> str:
+    parts = [p for p in value.replace("-", "_").split("_") if p]
+    return " ".join(p[:1].upper() + p[1:] for p in parts) or "Default"
+
+
+def configured_domains() -> list[dict]:
+    data = load_keywords_yaml(KEYWORDS_PATH)
+    domains_data = data.get("domains", {})
+    if not isinstance(domains_data, dict):
+        return []
+
+    domains = []
+    for key, config in domains_data.items():
+        domain_key = clean_yaml_scalar(key)
+        if not domain_key:
+            continue
+        label = domain_key
+        if isinstance(config, dict):
+            label = clean_yaml_scalar(config.get("label") or config.get("name") or domain_key)
+        domains.append({"key": domain_key, "label": label or title_case_domain(domain_key)})
+    return domains
+
+
+def domain_entries(papers: list[dict], configured: list[dict]) -> list[dict]:
+    domains: dict[str, str] = {}
+    for entry in configured:
+        key = normalize_text(entry.get("key"))
+        if key:
+            domains[key] = normalize_text(entry.get("label")) or title_case_domain(key)
+
+    for paper in papers:
+        key = normalize_text(paper.get("search_domain"))
+        if key and key not in domains:
+            domains[key] = normalize_text(paper.get("search_domain_label")) or title_case_domain(key)
+
+    return [
+        {"key": key, "label": label}
+        for key, label in sorted(domains.items(), key=lambda item: item[1].lower())
+    ]
 
 
 def domain_from_excel_path(excel_path: Path) -> str:
@@ -115,12 +205,29 @@ def load_all_rows(excel_files: list[Path]) -> list[dict]:
 def main() -> None:
     excel_files = discover_excel_files()
     if not excel_files:
+        configured = configured_domains()
         if OUTPUT_PATH.exists():
-            print(f"[WARN] No papers_record_*.xlsx files found; kept existing {OUTPUT_PATH}")
+            payload = json.loads(OUTPUT_PATH.read_text(encoding="utf-8"))
+            papers = payload.get("papers", [])
+            payload["domains"] = domain_entries(papers if isinstance(papers, list) else [], configured)
+            OUTPUT_PATH.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+            print(f"[WARN] No papers_record_*.xlsx files found; refreshed domain metadata in {OUTPUT_PATH}")
             return
-        raise FileNotFoundError("No papers_record_*.xlsx files found")
+        payload = {
+            "count": 0,
+            "crawled_date_min": "",
+            "crawled_date_max": "",
+            "published_date_min": "",
+            "published_date_max": "",
+            "domains": domain_entries([], configured),
+            "papers": [],
+        }
+        OUTPUT_PATH.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+        print(f"[OK] Wrote empty paper data to {OUTPUT_PATH}")
+        return
 
     papers = load_all_rows(excel_files)
+    configured = configured_domains()
 
     crawled_dates = sorted({p["crawled_date"] for p in papers if p["crawled_date"]})
     published_dates = sorted({p["published_date"] for p in papers if p["published_date"]})
@@ -131,7 +238,7 @@ def main() -> None:
         "crawled_date_max": crawled_dates[-1] if crawled_dates else "",
         "published_date_min": published_dates[0] if published_dates else "",
         "published_date_max": published_dates[-1] if published_dates else "",
-        "domains": sorted({p.get("search_domain", "") for p in papers if p.get("search_domain")}),
+        "domains": domain_entries(papers, configured),
         "papers": papers,
     }
 
