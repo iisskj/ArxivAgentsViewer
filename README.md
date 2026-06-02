@@ -1,4 +1,4 @@
-# LLM 量化论文阅读页
+# LLM 论文追踪指南
 
 ## 功能
 - 读取同目录下的 `papers_record_{domain}.xlsx` 并转换为 `papers_data.json`
