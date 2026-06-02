@@ -1,10 +1,4 @@
 domains:
-  llm_quantization:
-    label: LLM Quantization
-    max_results: 20
-    sample_size: 3
-    keywords:
-      - all:quantization+AND+all:large+AND+all:language+AND+all:model
   ai_agent_post_training:
     label: AI Agent Post-training
     max_results: 20
