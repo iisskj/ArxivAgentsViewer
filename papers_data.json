@@ -1,9 +1,9 @@
 {
-  "count": 12,
+  "count": 15,
   "crawled_date_min": "2026-06-03",
-  "crawled_date_max": "2026-06-03",
+  "crawled_date_max": "2026-06-07",
   "published_date_min": "2026-05-21",
-  "published_date_max": "2026-06-02",
+  "published_date_max": "2026-06-04",
   "domains": [
     {
       "key": "ai_agent_post_training",
@@ -11,6 +11,60 @@
     }
   ],
   "papers": [
+    {
+      "arxiv_id": "2606.05680",
+      "title": "CASS-RTL: Correctness-Aware Subspace Steering for RTL Generation with LLMs",
+      "authors": "Mohammad Akyash, Nowfel Mashnoor, Kimia Azar, Hadi Kamali",
+      "affiliations": "Department of Electrical and Computer Engineering (ECE), University of Central Florida, Orlando, FL 32816, USA",
+      "published_date": "2026-06-04",
+      "categories": "cs.PL, cs.AR, cs.LG",
+      "abstract": "Recent advances in large language models (LLMs) have enabled the automatic synthesis (generation) of register-transfer level (RTL) code from natural language instructions, offering a promising pathway to accelerate chip design. Unlike typical natural language (and software coding) tasks, LLM-based RTL code generation demands strict cycle accuracy with concurrency, where minor logical errors can render a circuit unusable or insecure. While prior work has explored hallucination mitigation via external verification, self-evaluation prompts, retrieval-augmented prompting, domain specific fine-tuning, agentic solutions, and reasoning, these approaches largely overlook the attention-oriented internal mechanisms of LLMs that may inherently correlate with RTL correctness. This work proposes CASS-RTL, a first-of-its-kind framework for discovering and leveraging LLMs' correctness-aware components to guide RTL generation toward functionally accurate outputs. We (i) identify attention heads whose activation patterns consistently differentiate correct from incorrect RTL; (ii) construct a low-dimensional subspace capturing correctness-relevant signals; and (iii) design a lightweight, geometry-aware intervention that steers the model at inference time. CASS-RTL is fully model-agnostic, requires no additional supervision or retraining, and readily integrates into existing models. Empirically, we evaluate CASS-RTL on multiple models and observe 10%-20% improvement in pass@1/5/10 accuracy on VerilogEval and 5% improvement on CVDP, demonstrating the effectiveness of our method in enhancing reliability without sacrificing model efficiency or requiring a large labeled dataset for fine-tuning.",
+      "summary_cn": "本文提出CASS-RTL，通过识别与RTL正确性相关的注意力头，构建低维正确性子空间，并在推理时进行几何感知steering，引导LLM生成更可靠的RTL。该方法无需额外监督或重训，在VerilogEval上pass指标提升10%到20%，CVDP提升5%。",
+      "pdf_filename": "2606.05680.pdf",
+      "crawled_date": "2026-06-07",
+      "notes": "",
+      "search_domain": "ai_agent_post_training",
+      "search_domain_label": "AI Agent Post-training",
+      "search_keyword": "all:agent+AND+all:instruction+AND+all:tuning",
+      "pdf_url": "https://arxiv.org/pdf/2606.05680",
+      "source_excel": "papers_record_ai_agent_post_training.xlsx"
+    },
+    {
+      "arxiv_id": "2606.04840",
+      "title": "Reinforcement Learning-Enabled Agent for Transmitter Optimization in Digital-Analog Radio-over-Fiber Fronthaul",
+      "authors": "Junhao Zhao, Huayuan Qin, Ouhan Huang, Zhongya Li, Chengxi Wang, Boyu Dong, Liangtao Chen, Xuyu Deng, An Yan, Penghao Luo, Renle Zheng, Yongzhu Hu, Aolong Sun, Yinjun Liu, Sizhe Xing, Nan Chi, Junwen Zhang",
+      "affiliations": "Key Laboratory for Information Science of Electromagnetic Waves (MoE), Shanghai Engineering Research Center of LEO Satellite Communication and Applications, Shanghai Collaborative Innovation Center of LEO Satellite Communication Technology, Future Information Innovative College (FIIC), Fudan University; Shanghai Innovation Institute",
+      "published_date": "2026-06-03",
+      "categories": "physics.optics",
+      "abstract": "Digital-analog radio-over-fiber (DA-RoF) has emerged as a promising fronthaul solution that combines the high spectral efficiency of analog transmission with the robustness of digital transmission. However, the performance of DA-RoF critically depends on several tightly coupled parameters, including the rounding factor (RF), scaling factor (SF), geometric shaping (GS) factor, and pre-equalization taps coefficients, which jointly affect quantization noise, nonlinear distortion, and bandwidth-induced inter-symbol interference (ISI). Conventional grid search-based optimization is computationally prohibitive and impractical for optical communication. In this work, we propose a reinforcement-learning (RL)-enabled DA-RoF fronthaul agent architecture, capable of autonomously learning optimal transmitter parameters from end-to-end signal-to-noise ratio (SNR) feedback without a differentiable channel model. Experimental results demonstrate that the trained agent steadily improves SNR through sequential decision making and outperforms baseline, achieving ~2.7-dB SNR improvement for 1- to 4-order DA-RoF transmission, reaching final SNR of 35.8 dB, 42.9 dB, 53.8 dB, and 63.2 dB and supporting 1024-, 4096-, 16384-, 65536-quadrature amplitude modulation (QAM) format, respectively. These results validate that the proposed RL-enabled framework provides online, scalable, and hardware-efficient parameter optimization for DA-RoF fronthaul systems, paving the way toward high-order modulation format and intelligent next-generation radio access networks.",
+      "summary_cn": "本文提出强化学习驱动的DA-RoF前传发射端优化智能体，可仅依赖端到端SNR反馈学习RF、SF、几何整形和预均衡参数。实验中该方法较基线提升约2.7 dB SNR，支持最高65536-QAM，展示了在线、可扩展的光前传参数优化能力。",
+      "pdf_filename": "2606.04840.pdf",
+      "crawled_date": "2026-06-07",
+      "notes": "",
+      "search_domain": "ai_agent_post_training",
+      "search_domain_label": "AI Agent Post-training",
+      "search_keyword": "all:agent+AND+all:reinforcement+AND+all:learning",
+      "pdf_url": "https://arxiv.org/pdf/2606.04840",
+      "source_excel": "papers_record_ai_agent_post_training.xlsx"
+    },
+    {
+      "arxiv_id": "2605.29612",
+      "title": "CONCAT: Consensus- and Confidence-Driven Ad Hoc Teaming for Efficient LLM-Based Multi-Agent Systems",
+      "authors": "Ziyang Ma, Dingyi Zhang, Sichu Liang, Jiajia Chu, Pengfei Xia, Hui Zang, Deyu Zhou",
+      "affiliations": "Southeast University; Huawei Technologies Ltd",
+      "published_date": "2026-05-28",
+      "categories": "cs.MA, cs.CL",
+      "abstract": "Although large language model (LLM) based multi-agent systems (MAS) show their capability to solve complex tasks and achieve higher performance over single agent systems, they lead to huge computational overheads because of heavy communication between agents. Previous research has made efforts to train a sparse multi-agent graph or fine-tune a planner to orchestrate the workflow better. However, such extra training processes introduce computational costs and limit MAS to specific domains, therefore compromising their generalizability. In this paper, we propose CONCAT, a training-free multi-agent collaboration framework based on CONsensus and Confidence-driven Ad hoc Teaming to efficiently organize agent interactions. Specifically, agents are clustered based on their initial answers, and leaders of each cluster are selected based on the agents' confidence. Then, a heuristic function based on the Theory of Mind is designed to predict the collaboration benefits between every two leaders according to their answers and confidence. Finally, an ad hoc multi-agent network is organized after evicting a percentage of communications based on the predicted benefits. Experiments across three LLMs and three benchmarks show that CONCAT achieves up to 2.02x higher efficiency (accuracy/latency ratio) than LLM-Debate and outperforms training-aware methods such as AgentDropout, while reducing average latency by 50.1% on Qwen2.5-14B-Instruct, without any task-specific training.",
+      "summary_cn": "本文提出CONCAT，一种无需训练的多智能体协作框架：先按初始答案聚类并以置信度选领导者，再用心智理论启发式估计协作收益，裁剪低收益通信。实验显示其在三种LLM与三类基准上最高提升2.02倍效率，并显著降低延迟。",
+      "pdf_filename": "2605.29612.pdf",
+      "crawled_date": "2026-06-07",
+      "notes": "",
+      "search_domain": "ai_agent_post_training",
+      "search_domain_label": "AI Agent Post-training",
+      "search_keyword": "all:agent+AND+all:instruction+AND+all:tuning",
+      "pdf_url": "https://arxiv.org/pdf/2605.29612",
+      "source_excel": "papers_record_ai_agent_post_training.xlsx"
+    },
     {
       "arxiv_id": "2606.03962",
       "title": "Using Reward Uncertainty to Induce Diverse Behaviour in Reinforcement Learning",
