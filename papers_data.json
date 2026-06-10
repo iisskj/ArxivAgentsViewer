@@ -1,9 +1,9 @@
 {
-  "count": 15,
+  "count": 18,
   "crawled_date_min": "2026-06-03",
-  "crawled_date_max": "2026-06-07",
+  "crawled_date_max": "2026-06-10",
   "published_date_min": "2026-05-21",
-  "published_date_max": "2026-06-04",
+  "published_date_max": "2026-06-09",
   "domains": [
     {
       "key": "ai_agent_post_training",
@@ -11,6 +11,60 @@
     }
   ],
   "papers": [
+    {
+      "arxiv_id": "2606.10709",
+      "title": "Effective Reinforcement Learning for Agentic Search by Recycling Zero-Variance Queries During Training",
+      "authors": "João Coelho, João Magalhães, Bruno Martins, Chenyan Xiong",
+      "affiliations": "Language Technologies Institute, Carnegie Mellon University, United States; Instituto Superior Tecnico and INESC-ID, University of Lisbon, Portugal; NOVA LINCS, NOVA School of Science and Technology, Portugal",
+      "published_date": "2026-06-09",
+      "categories": "cs.IR, cs.AI",
+      "abstract": "The use of GRPO-style algorithms has become the standard strategy for training LLM search agents under outcome-only rewards. With these algorithms, a query contributes to parameter updates only when its rollout group mixes successes and failures; all-correct (too-easy) and all-incorrect (too-hard) groups are zero-variance and waste rollout cost. Existing approaches treat zero-variance as a static property and either discard or pre-filter such groups. We hypothesize and empirically validate that queries flip between zero-variance and signal-bearing states as the policy evolves during training. Building on this intuition, we propose query recycling, which returns zero-variance groups to a mutable pool for future resampling, so that the effective training distribution co-evolves with the policy. With the proposed technique, a 1.7B parameter model trained on synthetic data can reach 66.0 average Pass@1 accross seven multi-hop QA benchmarks, matching or surpassing systems with up to 7B parameters trained on benchmark-derived supervision. Analysis of recycling patterns shows that recycled queries supply roughly three quarters of the effective batch by the end of training, with contributions split between recovery from policy improvement and policy drift.",
+      "summary_cn": "本文针对 GRPO 训练搜索智能体中零方差查询浪费 rollout 的问题，提出查询回收机制，将暂时过易或过难的样本放回动态池重采样。实验显示 1.7B 模型在七个多跳问答基准达 66.0 Pass@1，可匹敌更大模型。",
+      "pdf_filename": "2606.10709.pdf",
+      "crawled_date": "2026-06-10",
+      "notes": "",
+      "search_domain": "ai_agent_post_training",
+      "search_domain_label": "AI Agent Post-training",
+      "search_keyword": "all:agent+AND+all:reinforcement+AND+all:learning",
+      "pdf_url": "https://arxiv.org/pdf/2606.10709",
+      "source_excel": "papers_record_ai_agent_post_training.xlsx"
+    },
+    {
+      "arxiv_id": "2606.10611",
+      "title": "Geometry-Aware Reinforcement Learning for 2D Irregular Nesting",
+      "authors": "Auguste Lehuger, Guillaume Henon-Just",
+      "affiliations": "Valeo Brain",
+      "published_date": "2026-06-09",
+      "categories": "cs.LG, cs.CV",
+      "abstract": "Traditional heuristic solvers for the 2D irregular nesting problem share a fundamental limitation: they are blind to polygon geometry, relying on guided brute-force to navigate the continuous placement space with minimal geometrical guidance. In this paper, we argue that Reinforcement Learning is uniquely positioned to overcome this bottleneck. By pairing an optimization policy with a geometry-aware neural encoder, an agent can automatically discover rich geometric priors directly from data, utilizing these learned intuitions to strategically guide exploration. To realize this, we introduce the Polygons Transformer (PoT), a novel architecture that encodes 2D continuous vector geometries while allowing cross-polygons attention. We couple this novel architecture with a Combinatorial Optimization Reinforcement Learning (CORL) training framework to find optimal solutions. To support this paradigm, we release an open-source training dataset derived from complex geographic contours alongside a dedicated evaluation benchmark. Our empirical validation demonstrates that our trained agent achieves area utilization performance highly competitive with Sparrow, the state-of-the-art heuristic solver, proving that reinforcement learning can successfully discover and exploit geometric awareness for precise spatial tasks.",
+      "summary_cn": "本文面向二维不规则排样问题，提出 Polygons Transformer 结合组合优化强化学习，让智能体直接编码连续多边形几何并学习空间先验。作者发布训练集与评测基准，实验显示模型面积利用率可接近最强启发式 Sparrow。",
+      "pdf_filename": "2606.10611.pdf",
+      "crawled_date": "2026-06-10",
+      "notes": "",
+      "search_domain": "ai_agent_post_training",
+      "search_domain_label": "AI Agent Post-training",
+      "search_keyword": "all:agent+AND+all:reinforcement+AND+all:learning",
+      "pdf_url": "https://arxiv.org/pdf/2606.10611",
+      "source_excel": "papers_record_ai_agent_post_training.xlsx"
+    },
+    {
+      "arxiv_id": "2606.06114",
+      "title": "Towards Healthy Evolution: Exploring the Role and Mechanisms of Human-Agent Interaction in Self-Evolving Systems",
+      "authors": "Dianxing Shi, Bowen Wang, Junqi He, Junhao Chen, Yuta Nakashima",
+      "affiliations": "The University of Osaka; Independent researcher",
+      "published_date": "2026-06-04",
+      "categories": "cs.AI",
+      "abstract": "Self-evolving agents improve through continual self-play and self-generated learning signals, but autonomous evolution can also cause capability degradation and safety drift. Although human feedback has proven effective for static and post-trained agents, its role in self-evolving systems remains underexplored. We introduce Agent Norm Correction through Human-like Oversight and Review (ANCHOR), an LLM-based framework that simulates human supervision and delivers feedback at various phases of self-evolution. With ANCHOR, we evaluate two representative open-source self-evolving agent systems across coding, mathematical reasoning, and safety. Our results show that even limited supervision substantially mitigates safety degradation while preserving stable performance on core evolutionary objectives. Further analysis shows that supervision over the output verification phase is the most effective for intervention, whereas increasing supervision frequency yields diminishing returns. These findings provide empirical evidence and practical guidance for designing more stable, controllable, and human-aligned self-evolving agent systems.",
+      "summary_cn": "本文提出 ANCHOR，用 LLM 模拟人类监督介入自进化智能体训练，在编码、数学与安全任务上验证其作用。结果表明，少量监督即可显著缓解安全退化并保持核心能力，其中输出验证阶段干预最有效，增加监督频率收益递减。",
+      "pdf_filename": "2606.06114.pdf",
+      "crawled_date": "2026-06-10",
+      "notes": "",
+      "search_domain": "ai_agent_post_training",
+      "search_domain_label": "AI Agent Post-training",
+      "search_keyword": "all:agent+AND+all:post-training",
+      "pdf_url": "https://arxiv.org/pdf/2606.06114",
+      "source_excel": "papers_record_ai_agent_post_training.xlsx"
+    },
     {
       "arxiv_id": "2606.05680",
       "title": "CASS-RTL: Correctness-Aware Subspace Steering for RTL Generation with LLMs",
